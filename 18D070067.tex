@@ -1,22 +1,22 @@
-\documentclass[conference]{IEEEtran}
-\IEEEoverridecommandlockouts
-% The preceding line is only needed to identify funding in the first footnote. If that is unneeded, please comment it out.
-\usepackage{cite}
-\usepackage{amsmath,amssymb,amsfonts}
-\usepackage{algorithmic}
-\usepackage{graphicx}
-\usepackage{textcomp}
-\usepackage{xcolor}
-\usepackage{float}
-\usepackage{listings}
+    \documentclass[conference]{IEEEtran}
+    \IEEEoverridecommandlockouts
+    % The preceding line is only needed to identify funding in the first footnote. If that is unneeded, please comment it out.
+    \usepackage{cite}
+    \usepackage{amsmath,amssymb,amsfonts}
+    \usepackage{algorithmic}
+    \usepackage{graphicx}
+    \usepackage{textcomp}
+    \usepackage{xcolor}
+    \usepackage{float}
+    \usepackage{listings}
 
 
-\def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
-    T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+    \def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
+        T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
 \begin{document}
 
 \title{Fake News Detection on Social Media\\
-    \large EE769: Introduction to Machine Learning\\
+    \large DS203:  Programming for Data Science\\
     Course Project
 }\\
 \author{
@@ -30,12 +30,12 @@
 \maketitle
 
 \begin{abstract}
-    In the present times, malware attacks are one of the rising concerns regarding the security of users' data. In this project we attempt to use Machine learning techniques to determine the probability of a machine to be affected by malware. Comparison of the the Machine Learning Models Logistic Regression, KNN, Random Forest Classifier and LGBM for making predictions has been done. Since the dataset is quite large (more than 8GB!), the problem becomes a very high dimensionality problem. Hence, data preprocessing and feature engineering becomes very important in handling the given dataset and this has been done in the implementation. A prediction accuracy of 63.15 percent was obtained in making predictions.
+% In the present times, malware attacks are one of the rising concerns regarding the security of users' data. In this project we attempt to use Machine learning techniques to determine the probability of a machine to be affected by malware. Comparison of the the Machine Learning Models Logistic Regression, KNN, Random Forest Classifier and LGBM for making predictions has been done. Since the dataset is quite large (more than 8GB!), the problem becomes a very high dimensionality problem. Hence, data preprocessing and feature engineering becomes very important in handling the given dataset and this has been done in the implementation. A prediction accuracy of 63.15 percent was obtained in making predictions.
 
-\end{abstract}
+In the present times, Social Media has become an indispensable part of our life. The ubiquitousness of smartphones enables people to announce an emergency they’re observing in real-time. This is a great opportunity for people to share their news and information with their friends and family. However, the news and information that is shared on social media is not always accurate. This is where the concept of Fake News comes into play. Fake News is a news that is created by a person or organization that is not the original source of the news. This is a type of misinformation that is used to spread misinformation. In this project, we have used Machine Learning techniques to determine the probability of whether a given news is fake or not.
 
 \begin{IEEEkeywords}
-    Malware prediction, Machine Learning, Random Forest Classifier, KNN, Logistic Regression, LGBM (Light Gradient Boosting Machine)
+    \key{Fake News Detection}, \key{Machine Learning}, \key{Social Media}, \key{Data Science}
 \end{IEEEkeywords}
 
 \section{Introduction}
@@ -60,94 +60,121 @@ For this project, we have used the dataset from the Kaggle competition where thi
 \end{itemize}
 
 \section{Experiments and Results}
-\subsection{Reducing memory requirements}
-The raw data obtained from Kaggle was too big to even be opened. Since the dataset is huge, our first task to load the data successfully will be accomplished by reducing the memory requirements, so what we planned to do is as follows
-\begin{enumerate}
-    \item We switch the binary values to int8
-    \item We switch the binary values which contain the missing values to float16
-\end{enumerate}
-
-\subsection{Initial Look at the Data}
-We first got an idea about the size of the dataset.
+\subsection{Loading the Dataset}
+We first loaded the dataset and had a look at the first few entries of the dataset. The dataset has two files, train.csv and test.csv. The entries in train.csv are as follows:
 \begin{figure}[H]
     \centering
-    \includegraphics[width=\linewidth]{1.png}
+    \includegraphics[width=0.4\textwidth]{Results/train.png}
+    \caption{Entries in the train.csv file}
 \end{figure}
-Here, the size of the training data set is as mentioned eariler, 8921483 entries and 83 columns corresponding to each entry.
-
-Also we had a look at the various features included in the dataset.
+The entries in test.csv are as follows:
 \begin{figure}[H]
     \centering
-    \includegraphics[width=\linewidth]{2.png}
+    \includegraphics[width=0.4\textwidth]{Results/test.png}
+    \caption{Entries in the test.csv file}
 \end{figure}
+
+Also we observed that there are 7613 rows and 7 columns in train dataset and there are 3263 rows and 4 columns in test dataset.
+
+
 
 \subsection{Exploratory Data Analysis}
-The raw data that we obtained from Kaggle has very high dimensionality and missing values. Also the size of the data is comparatively very large as mentioned earlier. Hence, this step was very important in getting the right data before implementing any Machine Learning Model on it.\\
-First, we got an idea about the number of missing entries.
+After loading the dataset, we have performed exploratory data analysis on the data. We have performed the following:
+\subsubsection{Target Value Distribution}
+For our case the target value is binary i.e. 0 or 1. In other words, a given tweet is either fake or not. We first have a look at the distribution of the target values in the dataset. For this,we have made a pie chart of the target values.
+
 \begin{figure}[H]
     \centering
-    \includegraphics[width=\linewidth]{3.png}
+    \includegraphics[width=0.3\textwidth]{Results/Fake_News_Prediction_Pie_Chart.png}
+    \caption{Distribution of the target values in the dataset}
 \end{figure}
+Hence we observed that the dataset is skewed towards the Fake News. 57\% of the data is Fake News.
 
-Then we determined the proportion of data that was actually missing for each feature
+\subsubsection{Exploring Locations of the Tweets}
+After looking at the distribution of the target values, we have decided to explore the location of the tweets. We have made a bar chart of the locations of the tweets for the top 15 locations.
 \begin{figure}[H]
     \centering
-    \includegraphics[width=\linewidth]{4.png}
+    \includegraphics[width=0.5\textwidth]{Results/Location_Bar_Plot.png}
+    \caption{Bar chart of the top 15 locations of the tweets}
 \end{figure}
 
-We can easily see from above that features named as "PuaMode " and 'Census\_ProcessorClass' consists of more than $99 \%$ of missing values. Hence, we dropped those features from the dataset under consideration.
+From the above bar chart, we can observe that the location of the tweets are mostly in the United States. It is then followed by New-York and London.
 
-\subsubsection{Removing the Skewed Features}
-First we determined the skewness among the features.
+Further to get a better visualization of the location of the tweets, we have made a map of the locations of the tweets.
 \begin{figure}[H]
     \centering
-    \includegraphics[width=\linewidth]{5.png}
+    \includegraphics[width=0.5\textwidth]{Results/Tweets_location_on_map.png}
+    \caption{Map of the locations of the tweets}
 \end{figure}
 
-Now we can easily see that there are 15 columns which are highly skewed i.e have more than $98 \%$ skewness ,so we removed them from our dataset.
-
-\subsubsection{Filling the Missing Values}
-First, we determined the features with missing values which are of numeric type.
+\subsubsection{Distribution of the Real and Fake Tweets based on the location}
+We have made a bar chart of the distribution of the tweets based on the location.
 \begin{figure}[H]
     \centering
-    \includegraphics[width=\linewidth]{6.png}
+    \includegraphics[width=0.5\textwidth]{Results/Location_Distribution_Bar_Plot.png}
+    \caption{Bar chart of the distribution of the tweets based on the location}
 \end{figure}
 
-Then, we replaced the missing values with median of that column.
-\subsubsection{Encoding categorical features}
-First, we determined the features which were of category type
+From the above bar chart we observe that number of fake news from location USA is more than the number of real news from location USA. Also,for other locations such as India all the tweets are real news.
+
+\subsection{Distribution of word count in Real and Fake Tweets}
+We have made a bar chart of the distribution of the word count in the tweets.
 \begin{figure}[H]
     \centering
-    \includegraphics[width=\linewidth]{21.png}
+    \includegraphics[width=0.5\textwidth]{Results/Number_of_words_in_Tweets_Distribution_Bar_Plot.png}
+    \caption{Bar chart of the distribution of the word count in the tweets}
 \end{figure}
 
-Then, we used one-hot encoding technique to encode those features
+From the above plot we can observe that the distribution of fake disasters is skewed towards the left side of the plot. This is because the word count of the fake news is less than the word count of the real news.
 
-\subsubsection{Elimination of highly correlated features}
-Since dataset is too large its not a good idea to see all the correlation of all features at once,we will break the correlations into size of 15 features. The Correlation Matrices obtained are as follows:
+
+\subsection{Distribution of character count in Real and Fake Tweets}
+We have made a bar chart of the distribution of the character count in the tweets.
 \begin{figure}[H]
     \centering
-    \includegraphics[width=\linewidth]{7.png}
-\end{figure}
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=\linewidth]{8.png}
-\end{figure}
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=\linewidth]{9.png}
-\end{figure}
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=\linewidth]{10.png}
+    \includegraphics[width=0.5\textwidth]{Results/Number_of_characters_in_Tweets_Distribution_Bar_Plot.png}
+    \caption{Bar chart of the distribution of the character count in the tweets}
 \end{figure}
 
-Among all the correlation matrices above we dropped the columns which have higher correlation than $90 \%$. Hence we dropped the following features
-\begin{enumerate}
-    \item 'Census\_OSInstallLanguageIdentifier'
-    \item 'Census\_InternalPrimaryDisplayResolutionVertical'
-    \item 'Census\_OSSkuName'
-\end{enumerate}
+From the above plot we can see that the distribution of both real and fake tweets is similar. Hence, we can conclude that the character count of the tweets is similar.
+
+\subsection{Data Cleaning and Tokenization}
+After EDA, we started with the data cleaning process. Here, our objective was to make the data more consistent and clean so that we can use it for our analysis and make predictions using a machine learning model. The tokenization of tweets can be done using Keras' Tokenizer. Before that we perform some basic cleaning of the data.
+
+We removed the following from the tweets dataset:
+\begin{itemize}
+    \item Punctuation
+    \item Stop words
+    \item Non-alphanumeric characters
+    \item URLs
+    \item HTML tags
+    \item Emojis
+\end{itemize}
+
+The punctuation to the sentence adds up noise that brings ambiguity while training the model. English is one of the most common languages, especially in the world of social media. For instance, "a," "our," "for," "in," etc. are in the set of most commonly used words. Removing these words helps the model to consider only key features. These words also don't carry much information. By eliminating these words, we can improve the accuracy of the model.
+The common stop words in English language have been taken from the NLTK library. These are shown below:
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\textwidth]{Results/Stop_words.png}
+    \caption{Common stop words in English language}
+\end{figure}
+
+Also, we removed the URLs, HTML tags and Emojis from the tweets. This helps the model to consider only the important features. The dataset with just the cleaned tweets (without including any meta-data) is as follows:
+
+\subsubsection{Expanding the contractions in the Tweets}
+Contractions are used to describe a word or phrase in a sentence. For example, I'm, I've, I'll, I'd, I'll, etc. are contractions. We have expanded the contractions in the tweets. This will help in reducing the noise in the dataset. We considered different contractions mentioned in the link \url{https://stackoverflow.com/questions/19790188/expanding-english-language-contractions-in-python } \\
+An example of the expanded contractions used are:
+\begin{itemize}
+\item "aren't": "are not / am not"
+\item "can't": "cannot"
+\item "can't've": "cannot have"
+\item "'cause": "because"
+\item "could've": "could have"
+\item "couldn't": "could not"
+\item "couldn't've": "could not have"
+\item "didn't": "did not"
+\item"doesn't": "does not"
+
 
 \subsection{Test-Train Split}
 Since the dataset is quite large we take a relatively small portion of the dataset to test and train the model. We have taken 10000 entries to lower the computational time. Then we have split this data into training and testing (For validation) dataset.
